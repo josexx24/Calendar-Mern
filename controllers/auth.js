@@ -19,7 +19,7 @@ const crearUsuario = async (req, res = response) => {
     //Encriptar Contraseña
     const salt = bcrypt.genSaltSync();
     usuario.password = bcrypt.hashSync(password, salt);
-
+    console.log("antes de guardar");
     await usuario.save();
 
     //GENERAR JWT
