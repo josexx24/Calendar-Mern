@@ -7,7 +7,6 @@ const crearUsuario = async (req, res = response) => {
   const { email, password } = req.body;
   try {
     let usuario = await Usuario.findOne({ email });
-    console.log(usuario);
     if (usuario) {
       return res.status(400).json({
         ok: false,
@@ -24,12 +23,12 @@ const crearUsuario = async (req, res = response) => {
 
     //GENERAR JWT
     const token = await generarJWT(usuario.id, usuario.name);
-
-    res.status(201).json({
+    console.log(token);
+    return res.status(201).json({
       ok: true,
       uid: usuario.id,
       name: usuario.name,
-      token,
+      token: token,
     });
   } catch (error) {
     res.status(500).json({
@@ -79,11 +78,10 @@ const loginUsuario = async (req, res = response) => {
 };
 
 const revalidarToken = async (req, res = response) => {
-  const uid = req.uid;
-  const name = req.name;
-
+  const { uid, name } = req;
   //generar un nuevo jwt
   const token = await generarJWT(uid, name);
+  console.log("Token:", token);
   return res.json({
     ok: true,
     uid: uid,
